@@ -32,8 +32,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import com.queens.delivery.R;
-import com.queenscc.delivery.helpers.RequestQueueHelper;
-import com.queenscc.delivery.shared.SessionHandler;
+import com.queens.delivery.helpers.RequestQueueHelper;
+import com.queens.delivery.shared.SessionHandler;
 import com.queens.delivery.helpers.InputValidation;
 
 public class LoginActivity extends AppCompatActivity {

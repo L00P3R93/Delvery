@@ -21,8 +21,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.bumptech.glide.Glide;
 import com.queens.delivery.R;
 import com.queens.delivery.fragments.*;
-import com.queenscc.delivery.models.Rider;
-import com.queenscc.delivery.shared.SessionHandler;
+import com.queens.delivery.models.Rider;
+import com.queens.delivery.shared.SessionHandler;
 import com.queens.delivery.constants.NavigationDrawerConstants;
 
 
