@@ -48,7 +48,7 @@
     <fragment
         android:id="@+id/nav_parcel"
         android:name="com.queens.delivery.fragments.ParcelFragment"
-        android:label="@string/menu_parcel"
+        android:label="@string/menu_parcels"
         tools:layout="@layout/fragment_parcel" />
 
 </navigation>

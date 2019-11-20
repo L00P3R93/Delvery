@@ -1,11 +1,11 @@
-package com.queenscc.delivery.shared;
+package com.queens.delivery.shared;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.Date;
 
-import com.queenscc.delivery.models.Rider;
+import com.queens.delivery.models.Rider;
 
 public class SessionHandler {
     private static final String PREF_NAME = "UserSession";

@@ -1,4 +1,4 @@
-package com.queenscc.delivery.helpers;
+package com.queens.delivery.helpers;
 
 import android.content.Context;
 import com.android.volley.Request;

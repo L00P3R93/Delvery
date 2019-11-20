@@ -1,4 +1,4 @@
-package com.queenscc.delivery.models;
+package com.queens.delivery.models;
 
 
 import java.util.Date;
