@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.queens.delivery.fragments.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/nav_orders"
+        android:name="com.queens.delivery.fragments.OrdersFragment"
+        android:label="@string/menu_orders"
+        tools:layout="@layout/fragment_orders" />
+    <fragment
+        android:id="@+id/nav_express"
+        android:name="com.queens.delivery.fragments.HomeFragment"
+        android:label="@string/menu_express"
+        tools:layout="@layout/fragment_express" />
+    <fragment
+        android:id="@+id/nav_exchanges"
+        android:name="com.queens.delivery.fragments.ExchangesFragment"
+        android:label="@string/menu_exchange"
+        tools:layout="@layout/fragment_exchanges" />
+    <fragment
+        android:id="@+id/nav_delivered"
+        android:name="com.queens.delivery.fragments.DeliveredFragment"
+        android:label="@string/menu_delivered"
+        tools:layout="@layout/fragment_delivered" />
+    <fragment
+        android:id="@+id/nav_undelivered"
+        android:name="com.queens.delivery.fragments.UndeliveredFragment"
+        android:label="@string/menu_undelivered"
+        tools:layout="@layout/fragment_undelivered" />
+    <fragment
+        android:id="@+id/nav_returned"
+        android:name="com.queens.delivery.fragments.ReturnedFragment"
+        android:label="@string/menu_returned"
+        tools:layout="@layout/fragment_returned" />
+    <fragment
+        android:id="@+id/nav_rejected"
+        android:name="com.queens.delivery.fragments.RejectedFragment"
+        android:label="@string/menu_rejected"
+        tools:layout="@layout/fragment_rejected" />
+    <fragment
+        android:id="@+id/nav_parcel"
+        android:name="com.queens.delivery.fragments.ParcelFragment"
+        android:label="@string/menu_parcel"
+        tools:layout="@layout/fragment_parcel" />
+
+</navigation>

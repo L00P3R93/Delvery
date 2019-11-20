@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_orders"
+            android:icon="@drawable/ic_assignment_black_24dp"
+            android:title="@string/menu_orders" />
+        <item
+            android:id="@+id/nav_express"
+            android:icon="@drawable/ic_alarm_on_black_24dp"
+            android:title="@string/menu_express" />
+        <item
+            android:id="@+id/nav_exchange"
+            android:icon="@drawable/ic_swap_horiz_black_24dp"
+            android:title="@string/menu_exchange" />
+        <item
+            android:id="@+id/nav_delivered"
+            android:icon="@drawable/ic_assignment_turned_in_black_24dp"
+            android:title="@string/menu_delivered" />
+        <item
+            android:id="@+id/nav_undelivered"
+            android:icon="@drawable/ic_assignment_late_black_24dp"
+            android:title="@string/menu_undelivered" />
+        <item
+            android:id="@+id/nav_returned"
+            android:icon="@drawable/ic_assignment_returned_black_24dp"
+            android:title="@string/menu_returned" />
+        <item
+            android:id="@+id/nav_rejected"
+            android:icon="@drawable/ic_highlight_off_black_24dp"
+            android:title="@string/menu_rejected" />
+        <item
+            android:id="@+id/nav_parcels"
+            android:icon="@drawable/ic_work_black_24dp"
+            android:title="@string/menu_parcels" />
+    </group>
+</menu>
