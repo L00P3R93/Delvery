@@ -32,6 +32,11 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.Dark.Dialog2" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/colorPrimaryDarker</item>
+        <item name="android:textColorPrimary">@color/iron</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

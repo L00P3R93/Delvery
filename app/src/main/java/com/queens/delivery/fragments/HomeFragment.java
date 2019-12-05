@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -57,6 +58,9 @@ public class HomeFragment extends Fragment {
     private ConstraintLayout rootLayout;
     private EditText searchInput;
     private CharSequence search="";
+    private ProgressBar progressBar;
+    private int delv_id, order_id;
+    SharedPreferences pref;
 
     private static final String URL_AWAITING_ORDERs = "https://delivery.queensclassycollections.com/api/member/get_await.php";
 
@@ -86,6 +90,8 @@ public class HomeFragment extends Fragment {
         rootLayout = view.findViewById(R.id.root_layout);
         searchInput = view.findViewById(R.id.search_input);
         recyclerView = view.findViewById(R.id.news_rv);
+        progressBar = view.findViewById(R.id.progressBar);
+        pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
         mData = new ArrayList<>();
         mOrders = new ArrayList<>();
 
@@ -106,34 +112,8 @@ public class HomeFragment extends Fragment {
             rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
 
         }
-        // fill list news with data
-        // just for testing purpose i will fill the news list with random data
-        // you may get your data from an api / firebase or sqlite database ...
-        /*mData.add(new NewsItem("OnePlus 6T Camera Review:","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","6 july 1994",R.drawable.user));
-        mData.add(new NewsItem("I love Programming And Design","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,","6 july 1994",R.drawable.circul6));
-        mData.add(new NewsItem("My first trip to Thailand story ","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","6 july 1994",R.drawable.uservoyager));
-        mData.add(new NewsItem("After Facebook Messenger, Viber now gets...","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,","6 july 1994",R.drawable.useillust));
-        mData.add(new NewsItem("Isometric Design Grid Concept","lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit","6 july 1994",R.drawable.circul6));
-        mData.add(new NewsItem("Android R Design Concept 4K","lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit ","6 july 1994",R.drawable.user));
-        mData.add(new NewsItem("OnePlus 6T Camera Review:","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","6 july 1994",R.drawable.user));
-        mData.add(new NewsItem("I love Programming And Design","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,","6 july 1994",R.drawable.circul6));
-        mData.add(new NewsItem("My first trip to Thailand story ","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","6 july 1994",R.drawable.uservoyager));
-        mData.add(new NewsItem("After Facebook Messenger, Viber now gets...","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,","6 july 1994",R.drawable.useillust));
-        mData.add(new NewsItem("Isometric Design Grid Concept","lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit","6 july 1994",R.drawable.circul6));
-        mData.add(new NewsItem("Android R Design Concept 4K","lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit ","6 july 1994",R.drawable.user));
-        mData.add(new NewsItem("OnePlus 6T Camera Review:","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","6 july 1994",R.drawable.user));
-        mData.add(new NewsItem("I love Programming And Design","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,","6 july 1994",R.drawable.circul6));
-        mData.add(new NewsItem("My first trip to Thailand story ","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","6 july 1994",R.drawable.uservoyager));
-        mData.add(new NewsItem("After Facebook Messenger, Viber now gets...","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,","6 july 1994",R.drawable.useillust));
-        mData.add(new NewsItem("Isometric Design Grid Concept","lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit","6 july 1994",R.drawable.circul6));
-        mData.add(new NewsItem("Android R Design Concept 4K","lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit ","6 july 1994",R.drawable.user));*/
-
-
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        //recyclerView.setItemAnimator(new DefaultItemAnimator());
-        //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-
         loadOrders();
         fabSwitcher.setOnClickListener(v -> {
             isDark = !isDark ;
@@ -189,25 +169,25 @@ public class HomeFragment extends Fragment {
     public void onDetach() {super.onDetach();}
 
     private void saveThemeStatePref(boolean isDark) {
-
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("isDark",isDark);
         editor.commit();
     }
 
     private boolean getThemeStatePref () {
-
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
         boolean isDark = pref.getBoolean("isDark",false) ;
         return isDark;
 
     }
 
     private void loadOrders(){
+
+        progressBar.setVisibility(View.VISIBLE);
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_AWAITING_ORDERs, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                progressBar.setVisibility(View.INVISIBLE);
                 try {
                     JSONObject object = new JSONObject(response);
                     JSONArray array = object.getJSONArray("data");
@@ -223,6 +203,25 @@ public class HomeFragment extends Fragment {
                         ));
                     }
                     hAdapter = new HomeAdapter(getContext(),mOrders,isDark);
+                    hAdapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View itemView, int position) {
+                            delv_id = mOrders.get(position).getId();
+                            order_id = mOrders.get(position).getBillId();
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putInt("delv_id", delv_id);
+                            editor.putInt("order_id", order_id);
+                            editor.commit();
+
+                            Fragment fragment = new SetAwaitFragment();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            //Snackbar.make(getView(),delv_id+" "+order_id,Snackbar.LENGTH_LONG).show();
+                        }
+                    });
                     recyclerView.setAdapter(hAdapter);
 
                 } catch (JSONException e) {
@@ -232,7 +231,7 @@ public class HomeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Snackbar.make(getView(), "Error Loading",Snackbar.LENGTH_LONG).show();
             }
         });
         Volley.newRequestQueue(getContext()).add(stringRequest);

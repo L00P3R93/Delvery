@@ -2,6 +2,7 @@ package com.queens.delivery.adapters;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 import android.view.animation.AnimationUtils;
@@ -27,6 +28,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     private List<Orders> mData;
     private List<Orders> mDataFiltered;
     boolean isDark = false;
+    private OnItemClickListener mlistener;
+
+    public interface OnItemClickListener{
+        void onItemClick(View itemView, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mlistener = listener;
+    }
 
     public HomeAdapter(Context mContext, List<Orders> mData, boolean isDark) {
         this.mContext = mContext;
@@ -65,9 +75,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         // but i want to use a different one so lets create it ..
         homeViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        homeViewHolder.tv_title.setText(mDataFiltered.get(position).getBillNo());
-        homeViewHolder.tv_content.setText(mDataFiltered.get(position).getCustomerAddress());
-        homeViewHolder.tv_date.setText(mDataFiltered.get(position).getDate());
+        homeViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
+        homeViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
+        homeViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        homeViewHolder.date.setText(mDataFiltered.get(position).getDate());
         //homeViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
     }
 
@@ -110,8 +121,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-
-
                 mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 
@@ -120,21 +129,34 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     }
     public class HomeViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_title,tv_content,tv_date;
+        TextView order_code,customer_address,customer_phone,date;
         //ImageView img_user;
         RelativeLayout container;
 
         public HomeViewHolder(@NonNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.container);
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_content = itemView.findViewById(R.id.tv_description);
-            tv_date = itemView.findViewById(R.id.tv_date);
+            order_code = itemView.findViewById(R.id.order_code);
+            customer_address = itemView.findViewById(R.id.customer_address);
+            customer_phone = itemView.findViewById(R.id.customer_phone);
+            date = itemView.findViewById(R.id.date);
             //img_user = itemView.findViewById(R.id.img_user);
 
             if (isDark) {
                 setDarkTheme();
             }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View itemView) {
+                    if(mlistener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mlistener.onItemClick(itemView,position);
+                        }
+                    }
+                }
+            });
 
         }
 
