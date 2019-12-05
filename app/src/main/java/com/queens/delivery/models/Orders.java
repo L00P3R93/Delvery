@@ -46,13 +46,15 @@ date
 public class Orders {
     private int id;
     private int billId;
+    private String billNo;
     private String customerPhone;
     private String customerAddress;
     private String date;
 
-    public Orders(int id, int billId, String customerPhone, String customerAddress, String date){
+    public Orders(int id, int billId, String billNo, String customerPhone, String customerAddress, String date){
         this.id=id;
         this.billId = billId;
+        this.billNo= billNo;
         this.customerPhone = customerPhone;
         this.customerAddress = customerAddress;
         this.date = date;
@@ -61,6 +63,7 @@ public class Orders {
     //Getters
     public int getId(){return id;}
     public int getBillId(){return billId;}
+    public String getBillNo(){return billNo;}
     public String getCustomerPhone(){return customerPhone;}
     public String getCustomerAddress(){return customerAddress;}
     public String getDate(){return date;}

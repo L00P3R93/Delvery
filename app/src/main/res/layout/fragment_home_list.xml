@@ -26,8 +26,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="20dp"
             android:text="Simple Title Text "
             android:textColor="@color/title_text_color"
@@ -59,7 +59,7 @@
             android:textColor="@color/content_text_color"
 
             />
-        <ImageView
+        <!--<ImageView
             android:id="@+id/img_user"
             android:layout_width="36dp"
             android:layout_height="36dp"
@@ -69,7 +69,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
 
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/ic_launcher" />-->
     </RelativeLayout>
 
 

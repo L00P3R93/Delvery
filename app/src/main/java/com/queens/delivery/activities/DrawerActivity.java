@@ -1,6 +1,9 @@
 package com.queens.delivery.activities;
 
+import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.queens.delivery.R;
 import com.queens.delivery.fragments.*;
 import com.queens.delivery.models.Rider;
@@ -29,6 +33,7 @@ import com.queens.delivery.constants.NavigationDrawerConstants;
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private View navHeader;
     private SessionHandler session;
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         session=new SessionHandler(getApplicationContext());
         Rider rider = session.getRiderDetails();
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -86,11 +91,20 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
-        if(id == R.id.action_settings){
-            return true;
+        switch(item.getItemId()){
+            case R.id.action_refresh:
+                Snackbar.make(drawer, getString(R.string.action_refreshs), Snackbar.LENGTH_LONG).show();
+                break;
+            case R.id.action_settings:
+                Log.d("Action","Logging Out");
+                //Snackbar.make(drawer, getString(R.string.action_settings), Snackbar.LENGTH_LONG).show();
+                session.logoutRider();
+                Intent intent = new Intent(DrawerActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

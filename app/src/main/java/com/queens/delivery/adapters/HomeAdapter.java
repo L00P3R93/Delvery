@@ -17,25 +17,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.queens.delivery.R;
-import com.queens.delivery.models.NewsItem;
+import com.queens.delivery.models.Orders;
 
 import java.util.List;
 import java.util.ArrayList;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> implements Filterable{
     private Context mContext;
-    private List<NewsItem> mData;
-    private List<NewsItem> mDataFiltered;
+    private List<Orders> mData;
+    private List<Orders> mDataFiltered;
     boolean isDark = false;
 
-    public HomeAdapter(Context mContext, List<NewsItem> mData, boolean isDark) {
+    public HomeAdapter(Context mContext, List<Orders> mData, boolean isDark) {
         this.mContext = mContext;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFiltered = mData;
     }
 
-    public HomeAdapter(Context mContext, List<NewsItem> mData) {
+    public HomeAdapter(Context mContext, List<Orders> mData) {
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
@@ -57,7 +57,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         // we apply animation to views here
         // first lets create an animation for user photo
-        homeViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        //homeViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
 
         // lets create the animation for the whole card
         // first lets create a reference to it
@@ -65,10 +65,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         // but i want to use a different one so lets create it ..
         homeViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        homeViewHolder.tv_title.setText(mDataFiltered.get(position).getTitle());
-        homeViewHolder.tv_content.setText(mDataFiltered.get(position).getContent());
+        homeViewHolder.tv_title.setText(mDataFiltered.get(position).getBillNo());
+        homeViewHolder.tv_content.setText(mDataFiltered.get(position).getCustomerAddress());
         homeViewHolder.tv_date.setText(mDataFiltered.get(position).getDate());
-        homeViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
+        //homeViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
     }
 
     @Override
@@ -88,10 +88,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
                 }
                 else {
-                    List<NewsItem> lstFiltered = new ArrayList<>();
-                    for (NewsItem row : mData) {
+                    List<Orders> lstFiltered = new ArrayList<>();
+                    for (Orders row : mData) {
 
-                        if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
+                        if (row.getBillNo().toLowerCase().contains(Key.toLowerCase())){
                             lstFiltered.add(row);
                         }
 
@@ -112,7 +112,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
 
-                mDataFiltered = (List<NewsItem>) results.values;
+                mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -121,7 +121,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     public class HomeViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_title,tv_content,tv_date;
-        ImageView img_user;
+        //ImageView img_user;
         RelativeLayout container;
 
         public HomeViewHolder(@NonNull View itemView) {
@@ -130,7 +130,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_content = itemView.findViewById(R.id.tv_description);
             tv_date = itemView.findViewById(R.id.tv_date);
-            img_user = itemView.findViewById(R.id.img_user);
+            //img_user = itemView.findViewById(R.id.img_user);
 
             if (isDark) {
                 setDarkTheme();

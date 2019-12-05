@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -105,9 +106,6 @@ public class HomeFragment extends Fragment {
             rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
 
         }
-
-
-
         // fill list news with data
         // just for testing purpose i will fill the news list with random data
         // you may get your data from an api / firebase or sqlite database ...
@@ -135,78 +133,50 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //recyclerView.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_AWAITING_ORDERs, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONArray(response);
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject product = array.getJSONObject(i);
-                        mOrders.add(new Orders(
-                                product.getInt("id"),
-                                product.getInt("bill_no"),
-                                product.getString("customer_address"),
-                                product.getString("customer_phone"),
-                                product.getString("date")
-                        ));
-                    }
-                    hAdapter = new HomeAdapter(getContext(),mData,isDark);
-                    recyclerView.setAdapter(hAdapter);
-                    fabSwitcher.setOnClickListener(v -> {
-                        isDark = !isDark ;
-                        if (isDark) {
 
-                            rootLayout.setBackgroundColor(getResources().getColor(R.color.black));
-                            searchInput.setBackgroundResource(R.drawable.search_input_dark_style);
+        loadOrders();
+        fabSwitcher.setOnClickListener(v -> {
+            isDark = !isDark ;
+            if (isDark) {
 
-                        }
-                        else {
-                            rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                            searchInput.setBackgroundResource(R.drawable.search_input_style);
-                        }
+                rootLayout.setBackgroundColor(getResources().getColor(R.color.black));
+                searchInput.setBackgroundResource(R.drawable.search_input_dark_style);
 
-                        hAdapter = new HomeAdapter(getContext(),mData,isDark);
-                        if (!search.toString().isEmpty()){
-
-                            hAdapter.getFilter().filter(search);
-
-                        }
-                        recyclerView.setAdapter(hAdapter);
-                        saveThemeStatePref(isDark);
-                    });
-
-
-
-                    searchInput.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            hAdapter.getFilter().filter(s);
-                            search = s;
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
-        }, new Response.ErrorListener() {
+            else {
+                rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                searchInput.setBackgroundResource(R.drawable.search_input_style);
+            }
+
+            hAdapter = new HomeAdapter(getContext(),mOrders,isDark);
+            if (!search.toString().isEmpty()){
+
+                hAdapter.getFilter().filter(search);
+
+            }
+            recyclerView.setAdapter(hAdapter);
+            saveThemeStatePref(isDark);
+        });
+
+
+
+        searchInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hAdapter.getFilter().filter(s);
+                search = s;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
-        Volley.newRequestQueue(getContext()).add(stringRequest);
-
-
         return view;
     }
 
@@ -235,6 +205,36 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadOrders(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_AWAITING_ORDERs, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    JSONArray array = object.getJSONArray("data");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject product = array.getJSONObject(i);
+                        mOrders.add(new Orders(
+                                product.getInt("id"),
+                                product.getInt("bill_id"),
+                                product.getString("bill_no"),
+                                product.getString("customer_address"),
+                                product.getString("customer_phone"),
+                                product.getString("date")
+                        ));
+                    }
+                    hAdapter = new HomeAdapter(getContext(),mOrders,isDark);
+                    recyclerView.setAdapter(hAdapter);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(stringRequest);
     }
 }
