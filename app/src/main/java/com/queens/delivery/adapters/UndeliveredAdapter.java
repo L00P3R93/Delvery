@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.queens.delivery.R;
-import com.queens.delivery.models.NewsItem;
+import com.queens.delivery.models.Orders;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -25,18 +25,27 @@ import java.util.ArrayList;
 
 public class UndeliveredAdapter extends RecyclerView.Adapter<UndeliveredAdapter.UndeliveredViewHolder> implements Filterable {
     private Context mContext;
-    private List<NewsItem> mData;
-    private List<NewsItem> mDataFiltered;
+    private List<Orders> mData;
+    private List<Orders> mDataFiltered;
     boolean isDark = false;
+    private OnItemClickListener mListener;
+    
+    public interface OnItemClickListener{
+        void onItemClick(View itemView, int position);
+    }
+    
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener=listener;
+    }
 
-    public UndeliveredAdapter(Context mContext, List<NewsItem> mData, boolean isDark) {
+    public UndeliveredAdapter(Context mContext, List<Orders> mData, boolean isDark) {
         this.mContext = mContext;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFiltered = mData;
     }
 
-    public UndeliveredAdapter(Context mContext, List<NewsItem> mData) {
+    public UndeliveredAdapter(Context mContext, List<Orders> mData) {
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
@@ -58,7 +67,7 @@ public class UndeliveredAdapter extends RecyclerView.Adapter<UndeliveredAdapter.
 
         // we apply animation to views here
         // first lets create an animation for user photo
-        undeliveredViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        //undeliveredViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
 
         // lets create the animation for the whole card
         // first lets create a reference to it
@@ -66,10 +75,10 @@ public class UndeliveredAdapter extends RecyclerView.Adapter<UndeliveredAdapter.
 
         // but i want to use a different one so lets create it ..
         undeliveredViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        undeliveredViewHolder.tv_title.setText(mDataFiltered.get(position).getTitle());
-        undeliveredViewHolder.tv_content.setText(mDataFiltered.get(position).getContent());
-        undeliveredViewHolder.tv_date.setText(mDataFiltered.get(position).getDate());
-        undeliveredViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
+        undeliveredViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
+        undeliveredViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
+        undeliveredViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        undeliveredViewHolder.date.setText(mDataFiltered.get(position).getDate());
     }
 
     @Override
@@ -89,10 +98,10 @@ public class UndeliveredAdapter extends RecyclerView.Adapter<UndeliveredAdapter.
 
                 }
                 else {
-                    List<NewsItem> lstFiltered = new ArrayList<>();
-                    for (NewsItem row : mData) {
+                    List<Orders> lstFiltered = new ArrayList<>();
+                    for (Orders row : mData) {
 
-                        if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
+                        if (row.getBillNo().toLowerCase().contains(Key.toLowerCase())){
                             lstFiltered.add(row);
                         }
 
@@ -113,7 +122,7 @@ public class UndeliveredAdapter extends RecyclerView.Adapter<UndeliveredAdapter.
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
 
-                mDataFiltered = (List<NewsItem>) results.values;
+                mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -121,21 +130,32 @@ public class UndeliveredAdapter extends RecyclerView.Adapter<UndeliveredAdapter.
     }
     public class UndeliveredViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_title,tv_content,tv_date;
-        ImageView img_user;
+        TextView order_code,customer_address,customer_phone,date;
+        //ImageView img_user;
         RelativeLayout container;
 
         public UndeliveredViewHolder(@NonNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.container);
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_content = itemView.findViewById(R.id.tv_description);
-            tv_date = itemView.findViewById(R.id.tv_date);
-            img_user = itemView.findViewById(R.id.img_user);
+            order_code = itemView.findViewById(R.id.order_code);
+            customer_address = itemView.findViewById(R.id.customer_address);
+            customer_phone = itemView.findViewById(R.id.customer_phone);
+            date = itemView.findViewById(R.id.date);
 
             if (isDark) {
                 setDarkTheme();
             }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View itemView) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(itemView,position);
+                        }
+                    }
+                }
+            });
 
         }
 

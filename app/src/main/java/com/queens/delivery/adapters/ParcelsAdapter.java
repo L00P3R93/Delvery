@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.queens.delivery.R;
-import com.queens.delivery.models.NewsItem;
+import com.queens.delivery.models.Orders;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -25,18 +25,27 @@ import java.util.ArrayList;
 
 public class ParcelsAdapter extends RecyclerView.Adapter<ParcelsAdapter.ParcelsViewHolder> implements Filterable {
     private Context mContext;
-    private List<NewsItem> mData;
-    private List<NewsItem> mDataFiltered;
+    private List<Orders> mData;
+    private List<Orders> mDataFiltered;
     boolean isDark = false;
+    private OnItemClickListener mListener;
 
-    public ParcelsAdapter(Context mContext, List<NewsItem> mData, boolean isDark) {
+    public interface OnItemClickListener{
+        void onItemClick(View itemView, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
+
+    public ParcelsAdapter(Context mContext, List<Orders> mData, boolean isDark) {
         this.mContext = mContext;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFiltered = mData;
     }
 
-    public ParcelsAdapter(Context mContext, List<NewsItem> mData) {
+    public ParcelsAdapter(Context mContext, List<Orders> mData) {
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
@@ -58,7 +67,7 @@ public class ParcelsAdapter extends RecyclerView.Adapter<ParcelsAdapter.ParcelsV
 
         // we apply animation to views here
         // first lets create an animation for user photo
-        exchangeViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        //exchangeViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
 
         // lets create the animation for the whole card
         // first lets create a reference to it
@@ -66,10 +75,10 @@ public class ParcelsAdapter extends RecyclerView.Adapter<ParcelsAdapter.ParcelsV
 
         // but i want to use a different one so lets create it ..
         exchangeViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        exchangeViewHolder.tv_title.setText(mDataFiltered.get(position).getTitle());
-        exchangeViewHolder.tv_content.setText(mDataFiltered.get(position).getContent());
-        exchangeViewHolder.tv_date.setText(mDataFiltered.get(position).getDate());
-        exchangeViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
+        exchangeViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
+        exchangeViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
+        exchangeViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        exchangeViewHolder.date.setText(mDataFiltered.get(position).getDate());
     }
 
     @Override
@@ -89,10 +98,10 @@ public class ParcelsAdapter extends RecyclerView.Adapter<ParcelsAdapter.ParcelsV
 
                 }
                 else {
-                    List<NewsItem> lstFiltered = new ArrayList<>();
-                    for (NewsItem row : mData) {
+                    List<Orders> lstFiltered = new ArrayList<>();
+                    for (Orders row : mData) {
 
-                        if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
+                        if (row.getBillNo().toLowerCase().contains(Key.toLowerCase())){
                             lstFiltered.add(row);
                         }
 
@@ -113,7 +122,7 @@ public class ParcelsAdapter extends RecyclerView.Adapter<ParcelsAdapter.ParcelsV
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
 
-                mDataFiltered = (List<NewsItem>) results.values;
+                mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -121,21 +130,32 @@ public class ParcelsAdapter extends RecyclerView.Adapter<ParcelsAdapter.ParcelsV
     }
     public class ParcelsViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_title,tv_content,tv_date;
-        ImageView img_user;
+        TextView order_code,customer_address,customer_phone,date;
+        //ImageView img_user;
         RelativeLayout container;
 
         public ParcelsViewHolder(@NonNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.container);
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_content = itemView.findViewById(R.id.tv_description);
-            tv_date = itemView.findViewById(R.id.tv_date);
-            img_user = itemView.findViewById(R.id.img_user);
+            order_code = itemView.findViewById(R.id.order_code);
+            customer_address = itemView.findViewById(R.id.customer_address);
+            customer_phone = itemView.findViewById(R.id.customer_phone);
+            date = itemView.findViewById(R.id.date);
 
             if (isDark) {
                 setDarkTheme();
             }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View itemView) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
 
         }
 

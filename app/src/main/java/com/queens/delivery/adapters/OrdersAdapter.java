@@ -62,18 +62,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
 
     @Override
     public void onBindViewHolder(@NonNull OrdersViewHolder exchangeViewHolder, int position) {
-
-        // bind data here
-
-        // we apply animation to views here
-        // first lets create an animation for user photo
-        //exchangeViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
-
-        // lets create the animation for the whole card
-        // first lets create a reference to it
-        // you ca use the previous same animation like the following
-
-        // but i want to use a different one so lets create it ..
         exchangeViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
         exchangeViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
         exchangeViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
@@ -121,8 +109,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-
-
                 mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 

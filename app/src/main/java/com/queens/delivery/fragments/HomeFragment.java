@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private HomeAdapter hAdapter;
-    private List<NewsItem> mData;
+
     private List<Orders> mOrders;
     private FloatingActionButton fabSwitcher;
     private boolean isDark = false;
@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.news_rv);
         progressBar = view.findViewById(R.id.progressBar);
         pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
-        mData = new ArrayList<>();
+
         mOrders = new ArrayList<>();
 
         // load theme state

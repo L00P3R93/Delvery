@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.queens.delivery.R;
-import com.queens.delivery.models.NewsItem;
+import com.queens.delivery.models.Orders;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -27,18 +27,27 @@ import java.util.ArrayList;
 
 public class DeliveredAdapter extends RecyclerView.Adapter<DeliveredAdapter.DeliveredViewHolder> implements Filterable {
     private Context mContext;
-    private List<NewsItem> mData;
-    private List<NewsItem> mDataFiltered;
+    private List<Orders> mData;
+    private List<Orders> mDataFiltered;
     boolean isDark = false;
+    private OnItemClickListener mListener;
+    
+    public interface OnItemClickListener{
+        void onItemClick(View itemView, int position);
+    }
+    
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
 
-    public DeliveredAdapter(Context mContext, List<NewsItem> mData, boolean isDark) {
+    public DeliveredAdapter(Context mContext, List<Orders> mData, boolean isDark) {
         this.mContext = mContext;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFiltered = mData;
     }
 
-    public DeliveredAdapter(Context mContext, List<NewsItem> mData) {
+    public DeliveredAdapter(Context mContext, List<Orders> mData) {
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
@@ -60,7 +69,7 @@ public class DeliveredAdapter extends RecyclerView.Adapter<DeliveredAdapter.Deli
 
         // we apply animation to views here
         // first lets create an animation for user photo
-        deliveredViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        //deliveredViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
 
         // lets create the animation for the whole card
         // first lets create a reference to it
@@ -68,10 +77,10 @@ public class DeliveredAdapter extends RecyclerView.Adapter<DeliveredAdapter.Deli
 
         // but i want to use a different one so lets create it ..
         deliveredViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        deliveredViewHolder.tv_title.setText(mDataFiltered.get(position).getTitle());
-        deliveredViewHolder.tv_content.setText(mDataFiltered.get(position).getContent());
-        deliveredViewHolder.tv_date.setText(mDataFiltered.get(position).getDate());
-        deliveredViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
+        deliveredViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
+        deliveredViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
+        deliveredViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        deliveredViewHolder.date.setText(mDataFiltered.get(position).getDate());
     }
 
     @Override
@@ -91,10 +100,10 @@ public class DeliveredAdapter extends RecyclerView.Adapter<DeliveredAdapter.Deli
 
                 }
                 else {
-                    List<NewsItem> lstFiltered = new ArrayList<>();
-                    for (NewsItem row : mData) {
+                    List<Orders> lstFiltered = new ArrayList<>();
+                    for (Orders row : mData) {
 
-                        if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
+                        if (row.getBillNo().toLowerCase().contains(Key.toLowerCase())){
                             lstFiltered.add(row);
                         }
 
@@ -115,7 +124,7 @@ public class DeliveredAdapter extends RecyclerView.Adapter<DeliveredAdapter.Deli
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
 
-                mDataFiltered = (List<NewsItem>) results.values;
+                mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -123,21 +132,33 @@ public class DeliveredAdapter extends RecyclerView.Adapter<DeliveredAdapter.Deli
     }
     public class DeliveredViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_title,tv_content,tv_date;
-        ImageView img_user;
+        TextView order_code,customer_address,customer_phone,date;
+        //ImageView img_user;
         RelativeLayout container;
 
         public DeliveredViewHolder(@NonNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.container);
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_content = itemView.findViewById(R.id.tv_description);
-            tv_date = itemView.findViewById(R.id.tv_date);
-            img_user = itemView.findViewById(R.id.img_user);
+            order_code = itemView.findViewById(R.id.order_code);
+            customer_address = itemView.findViewById(R.id.customer_address);
+            customer_phone = itemView.findViewById(R.id.customer_phone);
+            date = itemView.findViewById(R.id.date);
 
             if (isDark) {
                 setDarkTheme();
             }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View itemView) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(itemView,position);
+                        }
+                    }
+                }
+            });
 
         }
 

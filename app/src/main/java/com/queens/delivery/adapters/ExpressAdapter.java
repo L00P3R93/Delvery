@@ -17,25 +17,35 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.queens.delivery.R;
-import com.queens.delivery.models.NewsItem;
+import com.queens.delivery.models.Orders;
 
 import java.util.List;
 import java.util.ArrayList;
 
 public class ExpressAdapter extends RecyclerView.Adapter<ExpressAdapter.ExpressViewHolder> implements Filterable{
     private Context mContext;
-    private List<NewsItem> mData;
-    private List<NewsItem> mDataFiltered;
+    private List<Orders> mData;
+    private List<Orders> mDataFiltered;
     boolean isDark = false;
 
-    public ExpressAdapter(Context mContext, List<NewsItem> mData, boolean isDark) {
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(View itemView, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
+
+    public ExpressAdapter(Context mContext, List<Orders> mData, boolean isDark) {
         this.mContext = mContext;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFiltered = mData;
     }
 
-    public ExpressAdapter(Context mContext, List<NewsItem> mData) {
+    public ExpressAdapter(Context mContext, List<Orders> mData) {
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
@@ -57,7 +67,7 @@ public class ExpressAdapter extends RecyclerView.Adapter<ExpressAdapter.ExpressV
 
         // we apply animation to views here
         // first lets create an animation for user photo
-        expressViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        //expressViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
 
         // lets create the animation for the whole card
         // first lets create a reference to it
@@ -65,10 +75,10 @@ public class ExpressAdapter extends RecyclerView.Adapter<ExpressAdapter.ExpressV
 
         // but i want to use a different one so lets create it ..
         expressViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        expressViewHolder.tv_title.setText(mDataFiltered.get(position).getTitle());
-        expressViewHolder.tv_content.setText(mDataFiltered.get(position).getContent());
-        expressViewHolder.tv_date.setText(mDataFiltered.get(position).getDate());
-        expressViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
+        expressViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
+        expressViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
+        expressViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        expressViewHolder.date.setText(mDataFiltered.get(position).getDate());
     }
 
     @Override
@@ -88,10 +98,10 @@ public class ExpressAdapter extends RecyclerView.Adapter<ExpressAdapter.ExpressV
 
                 }
                 else {
-                    List<NewsItem> lstFiltered = new ArrayList<>();
-                    for (NewsItem row : mData) {
+                    List<Orders> lstFiltered = new ArrayList<>();
+                    for (Orders row : mData) {
 
-                        if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
+                        if (row.getBillNo().toLowerCase().contains(Key.toLowerCase())){
                             lstFiltered.add(row);
                         }
 
@@ -112,7 +122,7 @@ public class ExpressAdapter extends RecyclerView.Adapter<ExpressAdapter.ExpressV
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
 
-                mDataFiltered = (List<NewsItem>) results.values;
+                mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -120,21 +130,33 @@ public class ExpressAdapter extends RecyclerView.Adapter<ExpressAdapter.ExpressV
     }
     public class ExpressViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_title,tv_content,tv_date;
-        ImageView img_user;
+        TextView order_code,customer_address,customer_phone,date;
+        //ImageView img_user;
         RelativeLayout container;
 
         public ExpressViewHolder(@NonNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.container);
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_content = itemView.findViewById(R.id.tv_description);
-            tv_date = itemView.findViewById(R.id.tv_date);
-            img_user = itemView.findViewById(R.id.img_user);
+            order_code = itemView.findViewById(R.id.order_code);
+            customer_address = itemView.findViewById(R.id.customer_address);
+            customer_phone = itemView.findViewById(R.id.customer_phone);
+            date = itemView.findViewById(R.id.date);
 
             if (isDark) {
                 setDarkTheme();
             }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(itemView,position);
+                        }
+                    }
+                }
+            });
 
         }
 
