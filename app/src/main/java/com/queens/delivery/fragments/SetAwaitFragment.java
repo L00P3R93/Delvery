@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.ProgressBar;
 
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -52,8 +53,18 @@ import static android.content.Context.MODE_PRIVATE;
 import com.queens.delivery.R;
 import com.queens.delivery.models.Products;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class SetAwaitFragment extends Fragment {
+
+    @BindView(R.id.accept)
+    AppCompatButton btnAccept;
+
+    @BindView(R.id.reject)
+    AppCompatButton btnReject;
 
     private RecyclerView recyclerView;
     private SetAwaitAdapter setAwaitAdapter;
@@ -68,7 +79,6 @@ public class SetAwaitFragment extends Fragment {
     SharedPreferences pref;
 
     private String URL_AWAITING_PRODUCTS = "";
-
 
 
     public SetAwaitFragment() {
@@ -96,6 +106,8 @@ public class SetAwaitFragment extends Fragment {
         mProducts = new ArrayList<>();
         delv_id = pref.getInt("delv_id",0);
         order_id = pref.getInt("order_id", 0);
+        ButterKnife.setDebug(true);
+        ButterKnife.bind(this, view);
 
         // load theme state
         isDark = getThemeStatePref();
@@ -131,6 +143,16 @@ public class SetAwaitFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @OnClick(R.id.accept)
+    public void accept(){
+        Snackbar.make(getView(), "Accepted", Snackbar.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.reject)
+    public void reject(){
+        Snackbar.make(getView(), "Rejected", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
