@@ -20,11 +20,7 @@
         android:name="com.queens.delivery.fragments.HomeFragment"
         android:label="@string/menu_express"
         tools:layout="@layout/fragment_express" />
-    <fragment
-        android:id="@+id/nav_exchanges"
-        android:name="com.queens.delivery.fragments.ExchangesFragment"
-        android:label="@string/menu_exchange"
-        tools:layout="@layout/fragment_exchanges" />
+
     <fragment
         android:id="@+id/nav_delivered"
         android:name="com.queens.delivery.fragments.DeliveredFragment"
@@ -50,5 +46,15 @@
         android:name="com.queens.delivery.fragments.ParcelFragment"
         android:label="@string/menu_parcels"
         tools:layout="@layout/fragment_parcel" />
+    <fragment
+        android:id="@+id/nav_delivered_parcel"
+        android:name="com.queens.delivery.fragments.DeliveredParcelFragment"
+        android:label="@string/menu_delivered_parcel"
+        tools:layout="@layout/fragment_delivered_parcel" />
+    <fragment
+        android:id="@+id/nav_undelivered_parcel"
+        android:name="com.queens.delivery.fragments.UndeliveredParcelFragment"
+        android:label="@string/menu_undelivered_parcel"
+        tools:layout="@layout/fragment_undelivered_parcel" />
 
 </navigation>

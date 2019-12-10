@@ -1,7 +1,6 @@
 package com.queens.delivery.activities;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -125,10 +124,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 fragment = new ExpressFragment();
                 displaySelectedFragment(fragment);
                 break;
-            case R.id.nav_exchange:
-                fragment = new ExchangesFragment();
-                displaySelectedFragment(fragment);
-                break;
             case R.id.nav_delivered:
                 fragment =  new DeliveredFragment();
                 displaySelectedFragment(fragment);
@@ -147,6 +142,14 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 break;
             case R.id.nav_parcels:
                 fragment = new ParcelFragment();
+                displaySelectedFragment(fragment);
+                break;
+            case R.id.nav_delivered_parcels:
+                fragment = new DeliveredParcelFragment();
+                displaySelectedFragment(fragment);
+                break;
+            case R.id.nav_undelivered_parcels:
+                fragment = new UndeliveredParcelFragment();
                 displaySelectedFragment(fragment);
                 break;
         }

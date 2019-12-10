@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -47,7 +48,7 @@ import org.json.JSONObject;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerView;
     private HomeAdapter hAdapter;
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment {
     private EditText searchInput;
     private CharSequence search="";
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipe;
     private int delv_id, order_id;
     SharedPreferences pref;
 
@@ -86,6 +88,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        swipe = view.findViewById(R.id.swipeContainer);
         fabSwitcher = view.findViewById(R.id.fab_switcher);
         rootLayout = view.findViewById(R.id.root_layout);
         searchInput = view.findViewById(R.id.search_input);
@@ -94,6 +97,12 @@ public class HomeFragment extends Fragment {
         pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
 
         mOrders = new ArrayList<>();
+
+        swipe.setOnRefreshListener(this);
+        swipe.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         // load theme state
 
@@ -167,6 +176,12 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onDetach() {super.onDetach();}
+
+    public void onRefresh(){
+        hAdapter.clearAll();
+        loadOrders();
+        swipe.setRefreshing(false);
+    }
 
     private void saveThemeStatePref(boolean isDark) {
         SharedPreferences.Editor editor = pref.edit();

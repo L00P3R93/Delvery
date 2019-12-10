@@ -1,8 +1,8 @@
 package com.queens.delivery.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,27 +14,32 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 
-import androidx.fragment.app.Fragment;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import com.queens.delivery.R;
+import com.queens.delivery.adapters.UndeliveredParcelAdapter;
 import com.queens.delivery.models.Orders;
-import com.queens.delivery.adapters.ParcelsAdapter;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,14 +47,11 @@ import org.json.JSONObject;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class ParcelFragment extends Fragment {
+public class UndeliveredParcelFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerView;
-    private ParcelsAdapter pAdapter;
+    private UndeliveredParcelAdapter hAdapter;
+
     private List<Orders> mOrders;
     private FloatingActionButton fabSwitcher;
     private boolean isDark = false;
@@ -57,34 +59,49 @@ public class ParcelFragment extends Fragment {
     private EditText searchInput;
     private CharSequence search="";
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipe;
     private int delv_id, order_id;
     SharedPreferences pref;
 
-    private static final String URL_PARCEL_DELIVERED = "https://delivery.queensclassycollections.com/api/member/get_parcel_delivered.php?rider_id=2";
+    private static final String URL_UNDELIVERED_PARCELS = "https://delivery.queensclassycollections.com/api/member/get_undelivered_parcel.php?rider_id=2";
 
-    public ParcelFragment() {
+
+
+    public UndeliveredParcelFragment() {
         // Required empty public constructor
     }
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("PARCELS");
+        getActivity().setTitle("UNDELIVERED");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_parcel, container, false);
+        View view = inflater.inflate(R.layout.fragment_undelivered_parcel, container, false);
 
+        swipe = view.findViewById(R.id.swipeContainer);
         fabSwitcher = view.findViewById(R.id.fab_switcher);
         rootLayout = view.findViewById(R.id.root_layout);
         searchInput = view.findViewById(R.id.search_input);
         recyclerView = view.findViewById(R.id.news_rv);
         progressBar = view.findViewById(R.id.progressBar);
         pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
+
         mOrders = new ArrayList<>();
+
+        swipe.setOnRefreshListener(this);
+        swipe.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         // load theme state
 
@@ -103,7 +120,7 @@ public class ParcelFragment extends Fragment {
             rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
 
         }
-        
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         loadOrders();
         fabSwitcher.setOnClickListener(v -> {
@@ -119,13 +136,13 @@ public class ParcelFragment extends Fragment {
                 searchInput.setBackgroundResource(R.drawable.search_input_style);
             }
 
-            pAdapter = new ParcelsAdapter(getContext(),mOrders,isDark);
+            hAdapter = new UndeliveredParcelAdapter(getContext(),mOrders,isDark);
             if (!search.toString().isEmpty()){
 
-                pAdapter.getFilter().filter(search);
+                hAdapter.getFilter().filter(search);
 
             }
-            recyclerView.setAdapter(pAdapter);
+            recyclerView.setAdapter(hAdapter);
             saveThemeStatePref(isDark);
         });
 
@@ -139,7 +156,7 @@ public class ParcelFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                pAdapter.getFilter().filter(s);
+                hAdapter.getFilter().filter(s);
                 search = s;
             }
 
@@ -159,6 +176,12 @@ public class ParcelFragment extends Fragment {
     @Override
     public void onDetach() {super.onDetach();}
 
+    public void onRefresh(){
+        hAdapter.clearAll();
+        loadOrders();
+        swipe.setRefreshing(false);
+    }
+
     private void saveThemeStatePref(boolean isDark) {
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("isDark",isDark);
@@ -175,7 +198,7 @@ public class ParcelFragment extends Fragment {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_PARCEL_DELIVERED, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_UNDELIVERED_PARCELS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progressBar.setVisibility(View.INVISIBLE);
@@ -193,8 +216,8 @@ public class ParcelFragment extends Fragment {
                                 product.getString("date")
                         ));
                     }
-                    pAdapter = new ParcelsAdapter(getContext(),mOrders,isDark);
-                    pAdapter.setOnItemClickListener(new ParcelsAdapter.OnItemClickListener() {
+                    hAdapter = new UndeliveredParcelAdapter(getContext(),mOrders,isDark);
+                    hAdapter.setOnItemClickListener(new UndeliveredParcelAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View itemView, int position) {
                             delv_id = mOrders.get(position).getId();
@@ -213,7 +236,7 @@ public class ParcelFragment extends Fragment {
                             //Snackbar.make(getView(),delv_id+" "+order_id,Snackbar.LENGTH_LONG).show();
                         }
                     });
-                    recyclerView.setAdapter(pAdapter);
+                    recyclerView.setAdapter(hAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -227,5 +250,6 @@ public class ParcelFragment extends Fragment {
         });
         Volley.newRequestQueue(getContext()).add(stringRequest);
     }
-
 }
+
+

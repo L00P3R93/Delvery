@@ -84,6 +84,11 @@ public class ExpressAdapter extends RecyclerView.Adapter<ExpressAdapter.ExpressV
     @Override
     public int getItemCount() {return mDataFiltered.size();}
 
+    public void clearAll(){
+        mDataFiltered.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public Filter getFilter() {
 

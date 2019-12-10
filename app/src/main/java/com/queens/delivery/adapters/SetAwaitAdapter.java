@@ -80,7 +80,10 @@ public class SetAwaitAdapter extends RecyclerView.Adapter<SetAwaitAdapter.SetAwa
     @Override
     public int getItemCount() {return mData.size();}
 
-
+    public void clearAll(){
+        mDataFiltered.clear();
+        notifyDataSetChanged();
+    }
     public class SetAwaitViewHolder extends RecyclerView.ViewHolder {
 
         TextView product_name, quantity;

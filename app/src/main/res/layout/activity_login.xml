@@ -22,7 +22,7 @@
             android:layout_height="170dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="3dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/queens" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutEmail"

@@ -1,6 +1,8 @@
 package com.queens.delivery.adapters;
+
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 import android.view.animation.AnimationUtils;
@@ -22,61 +24,74 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder> implements Filterable {
+
+public class UndeliveredParcelAdapter extends RecyclerView.Adapter<UndeliveredParcelAdapter.UndeliveredParcelViewHolder> implements Filterable {
+
     private Context mContext;
     private List<Orders> mData;
     private List<Orders> mDataFiltered;
     boolean isDark = false;
-    private OnItemClickListener mListener;
-
+    private OnItemClickListener mlistener;
 
     public interface OnItemClickListener{
         void onItemClick(View itemView, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
-        this.mListener = listener;
+        this.mlistener = listener;
     }
 
-    public OrdersAdapter(Context mContext, List<Orders> mData, boolean isDark) {
+    public UndeliveredParcelAdapter(Context mContext, List<Orders> mData, boolean isDark){
         this.mContext = mContext;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFiltered = mData;
     }
 
-    public OrdersAdapter(Context mContext, List<Orders> mData) {
+    public UndeliveredParcelAdapter(Context mContext, List<Orders> mData){
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
-
     }
 
     @NonNull
     @Override
-    public OrdersViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public UndeliveredParcelViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View layout = LayoutInflater.from(mContext).inflate(R.layout.fragment_orders_list,viewGroup,false);
-        return new OrdersViewHolder(layout);
+        View layout = LayoutInflater.from(mContext).inflate(R.layout.fragment_undelivered_parcel_list,viewGroup,false);
+        return new UndeliveredParcelViewHolder(layout);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrdersViewHolder exchangeViewHolder, int position) {
-        exchangeViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        exchangeViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
-        exchangeViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
-        exchangeViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
-        exchangeViewHolder.date.setText(mDataFiltered.get(position).getDate());
-        //exchangeViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
+    public void onBindViewHolder(@NonNull UndeliveredParcelViewHolder homeViewHolder, int position) {
+
+        // bind data here
+
+        // we apply animation to views here
+        // first lets create an animation for user photo
+        //homeViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+
+        // lets create the animation for the whole card
+        // first lets create a reference to it
+        // you ca use the previous same animation like the following
+
+        // but i want to use a different one so lets create it ..
+        homeViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
+        homeViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
+        homeViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
+        homeViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        homeViewHolder.date.setText(mDataFiltered.get(position).getDate());
+        //homeViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
     }
+
 
     @Override
     public int getItemCount() {return mDataFiltered.size();}
-
     public void clearAll(){
         mDataFiltered.clear();
         notifyDataSetChanged();
     }
+
 
     @Override
     public Filter getFilter() {
@@ -119,14 +134,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
 
             }
         };
-    }
-    public class OrdersViewHolder extends RecyclerView.ViewHolder {
 
+
+    }
+
+    public class UndeliveredParcelViewHolder extends RecyclerView.ViewHolder{
         TextView order_code,customer_address,customer_phone,date;
         //ImageView img_user;
         RelativeLayout container;
-
-        public OrdersViewHolder(@NonNull View itemView) {
+        public UndeliveredParcelViewHolder(@NonNull View itemView){
             super(itemView);
             container = itemView.findViewById(R.id.container);
             order_code = itemView.findViewById(R.id.order_code);
@@ -141,26 +157,21 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if(mListener != null){
+                public void onClick(View itemView) {
+                    if(mlistener != null){
                         int position = getAdapterPosition();
                         if(position != RecyclerView.NO_POSITION){
-                            mListener.onItemClick(itemView, position);
+                            mlistener.onItemClick(itemView,position);
                         }
                     }
                 }
             });
-
         }
-
 
         private void setDarkTheme() {
 
             container.setBackgroundResource(R.drawable.card_bg_dark);
 
         }
-
-
     }
 }
-

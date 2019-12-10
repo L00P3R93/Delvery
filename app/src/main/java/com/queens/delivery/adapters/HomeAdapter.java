@@ -84,6 +84,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public int getItemCount() {return mDataFiltered.size();}
+    public void clearAll(){
+        mDataFiltered.clear();
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public Filter getFilter() {
@@ -126,6 +131,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
             }
         };
+
+
     }
     public class HomeViewHolder extends RecyclerView.ViewHolder {
 

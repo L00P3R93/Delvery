@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -58,7 +59,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class SetAwaitFragment extends Fragment {
+public class SetAwaitFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.accept)
     AppCompatButton btnAccept;
@@ -75,6 +76,7 @@ public class SetAwaitFragment extends Fragment {
 
     private CharSequence search="";
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipe;
     private int delv_id, order_id;
     SharedPreferences pref;
 
@@ -102,12 +104,20 @@ public class SetAwaitFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.products_rv);
         progressBar = view.findViewById(R.id.progressBar);
+        swipe = view.findViewById(R.id.swipeContainer);
         pref = getActivity().getApplicationContext().getSharedPreferences("myPref", Context.MODE_PRIVATE);
         mProducts = new ArrayList<>();
         delv_id = pref.getInt("delv_id",0);
         order_id = pref.getInt("order_id", 0);
         ButterKnife.setDebug(true);
         ButterKnife.bind(this, view);
+
+        swipe.setOnRefreshListener(this);
+        swipe.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
 
         // load theme state
         isDark = getThemeStatePref();
@@ -143,6 +153,12 @@ public class SetAwaitFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void onRefresh(){
+        setAwaitAdapter.clearAll();
+        loadProducts();
+        swipe.setRefreshing(false);
     }
 
     @OnClick(R.id.accept)

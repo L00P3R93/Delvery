@@ -17,10 +17,6 @@
             android:icon="@drawable/ic_alarm_on_black_24dp"
             android:title="@string/menu_express" />
         <item
-            android:id="@+id/nav_exchange"
-            android:icon="@drawable/ic_swap_horiz_black_24dp"
-            android:title="@string/menu_exchange" />
-        <item
             android:id="@+id/nav_delivered"
             android:icon="@drawable/ic_assignment_turned_in_black_24dp"
             android:title="@string/menu_delivered" />
@@ -40,5 +36,14 @@
             android:id="@+id/nav_parcels"
             android:icon="@drawable/ic_work_black_24dp"
             android:title="@string/menu_parcels" />
+        <item
+            android:id="@+id/nav_delivered_parcels"
+            android:icon="@drawable/ic_work_black_24dp"
+            android:title="@string/menu_parcels" />
+        <item
+            android:id="@+id/nav_undelivered_parcels"
+            android:icon="@drawable/ic_work_black_24dp"
+            android:title="@string/menu_parcels" />
+
     </group>
 </menu>
