@@ -50,6 +50,18 @@ public class Orders {
     private String customerPhone;
     private String customerAddress;
     private String date;
+    private String reason;
+    private String rejection;
+
+    public Orders(int id, int billId, String billNo, String customerPhone, String customerAddress, String date, String reason){
+        this.id=id;
+        this.billId = billId;
+        this.billNo= billNo;
+        this.customerPhone = customerPhone;
+        this.customerAddress = customerAddress;
+        this.reason = reason;
+        this.date = date;
+    }
 
     public Orders(int id, int billId, String billNo, String customerPhone, String customerAddress, String date){
         this.id=id;
@@ -60,6 +72,7 @@ public class Orders {
         this.date = date;
     }
 
+
     //Getters
     public int getId(){return id;}
     public int getBillId(){return billId;}
@@ -67,4 +80,5 @@ public class Orders {
     public String getCustomerPhone(){return customerPhone;}
     public String getCustomerAddress(){return customerAddress;}
     public String getDate(){return date;}
+    public String getReason(){return reason;}
 }

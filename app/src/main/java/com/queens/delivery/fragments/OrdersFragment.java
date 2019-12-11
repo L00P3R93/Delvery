@@ -110,12 +110,6 @@ public class OrdersFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         }
 
-
-
-
-
-
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         loadOrders();
         fabSwitcher.setOnClickListener(v -> {

@@ -19,35 +19,58 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-
-            android:id="@+id/tv_title"
+            android:id="@+id/order_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="20dp"
             android:text="Simple Title Text "
             android:textColor="@color/title_text_color"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_description"
+            android:id="@+id/customer_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_title"
-            android:layout_alignStart="@+id/tv_title"
-            android:layout_alignLeft="@id/tv_title"
+            android:layout_below="@id/order_code"
+            android:layout_alignStart="@+id/order_code"
+            android:layout_alignLeft="@id/order_code"
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:lineSpacingExtra="8dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+            android:text="Asdf Asdf"
+            android:textColor="@color/content_text_color" />
+        <TextView
+            android:id="@+id/customer_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/order_code"
+            android:layout_alignStart="@+id/order_code"
+            android:layout_alignLeft="@id/order_code"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="16dp"
+            android:lineSpacingExtra="8dp"
+            android:text="Asdf 2 Asdf"
+            android:textColor="@color/content_text_color" />
+        <TextView
+            android:id="@+id/reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/order_code"
+            android:layout_alignStart="@+id/order_code"
+            android:layout_alignLeft="@id/order_code"
+            android:layout_marginTop="52dp"
+            android:layout_marginRight="16dp"
+            android:lineSpacingExtra="8dp"
+            android:text="Asdf 3 Asdf"
             android:textColor="@color/content_text_color" />
 
         <TextView
-            android:id="@+id/tv_date"
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -59,7 +82,7 @@
             android:textColor="@color/content_text_color"
 
             />
-        <ImageView
+        <!--<ImageView
             android:id="@+id/img_user"
             android:layout_width="36dp"
             android:layout_height="36dp"
@@ -69,7 +92,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
 
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/ic_launcher" />-->
     </RelativeLayout>
 
 

@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.queens.delivery.R;
-import com.queens.delivery.models.NewsItem;
+import com.queens.delivery.models.Orders;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -25,18 +25,27 @@ import java.util.ArrayList;
 
 public class ReturnsAdapter extends RecyclerView.Adapter<ReturnsAdapter.ReturnsViewHolder> implements Filterable {
     private Context mContext;
-    private List<NewsItem> mData;
-    private List<NewsItem> mDataFiltered;
+    private List<Orders> mData;
+    private List<Orders> mDataFiltered;
     boolean isDark = false;
+    private OnItemClickListener mListener;
+    
+    public interface OnItemClickListener{
+        void onItemClick(View itemView, int position);
+    }
+    
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
 
-    public ReturnsAdapter(Context mContext, List<NewsItem> mData, boolean isDark) {
+    public ReturnsAdapter(Context mContext, List<Orders> mData, boolean isDark) {
         this.mContext = mContext;
         this.mData = mData;
         this.isDark = isDark;
         this.mDataFiltered = mData;
     }
 
-    public ReturnsAdapter(Context mContext, List<NewsItem> mData) {
+    public ReturnsAdapter(Context mContext, List<Orders> mData) {
         this.mContext = mContext;
         this.mData = mData;
         this.mDataFiltered = mData;
@@ -58,7 +67,7 @@ public class ReturnsAdapter extends RecyclerView.Adapter<ReturnsAdapter.ReturnsV
 
         // we apply animation to views here
         // first lets create an animation for user photo
-        returnsViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        //returnsViewHolder.img_user.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
 
         // lets create the animation for the whole card
         // first lets create a reference to it
@@ -66,14 +75,19 @@ public class ReturnsAdapter extends RecyclerView.Adapter<ReturnsAdapter.ReturnsV
 
         // but i want to use a different one so lets create it ..
         returnsViewHolder.container.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
-        returnsViewHolder.tv_title.setText(mDataFiltered.get(position).getTitle());
-        returnsViewHolder.tv_content.setText(mDataFiltered.get(position).getContent());
-        returnsViewHolder.tv_date.setText(mDataFiltered.get(position).getDate());
-        returnsViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
+        returnsViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
+        returnsViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
+        returnsViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        returnsViewHolder.reason.setText(mDataFiltered.get(position).getReason());
+        returnsViewHolder.date.setText(mDataFiltered.get(position).getDate());
     }
 
     @Override
     public int getItemCount() {return mDataFiltered.size();}
+    public void clearAll(){
+        mDataFiltered.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public Filter getFilter() {
@@ -89,10 +103,10 @@ public class ReturnsAdapter extends RecyclerView.Adapter<ReturnsAdapter.ReturnsV
 
                 }
                 else {
-                    List<NewsItem> lstFiltered = new ArrayList<>();
-                    for (NewsItem row : mData) {
+                    List<Orders> lstFiltered = new ArrayList<>();
+                    for (Orders row : mData) {
 
-                        if (row.getTitle().toLowerCase().contains(Key.toLowerCase())){
+                        if (row.getBillNo().toLowerCase().contains(Key.toLowerCase())){
                             lstFiltered.add(row);
                         }
 
@@ -113,7 +127,7 @@ public class ReturnsAdapter extends RecyclerView.Adapter<ReturnsAdapter.ReturnsV
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
 
-                mDataFiltered = (List<NewsItem>) results.values;
+                mDataFiltered = (List<Orders>) results.values;
                 notifyDataSetChanged();
 
             }
@@ -121,23 +135,38 @@ public class ReturnsAdapter extends RecyclerView.Adapter<ReturnsAdapter.ReturnsV
     }
     public class ReturnsViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_title,tv_content,tv_date;
+        TextView order_code,customer_address,customer_phone,date,reason;
         ImageView img_user;
         RelativeLayout container;
 
         public ReturnsViewHolder(@NonNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.container);
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_content = itemView.findViewById(R.id.tv_description);
-            tv_date = itemView.findViewById(R.id.tv_date);
-            img_user = itemView.findViewById(R.id.img_user);
+            order_code = itemView.findViewById(R.id.order_code);
+            customer_address = itemView.findViewById(R.id.customer_address);
+            customer_phone = itemView.findViewById(R.id.customer_phone);
+            reason = itemView.findViewById(R.id.reason);
+            date = itemView.findViewById(R.id.date);
 
             if (isDark) {
                 setDarkTheme();
             }
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View itemView) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(itemView,position);
+                        }
+                    }
+                }
+            });
+
         }
+
+
 
 
         private void setDarkTheme() {

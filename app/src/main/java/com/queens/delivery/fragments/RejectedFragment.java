@@ -188,6 +188,7 @@ public class RejectedFragment extends Fragment {
                                 product.getString("bill_no"),
                                 product.getString("customer_address"),
                                 product.getString("customer_phone"),
+                                product.getString("rejection"),
                                 product.getString("date")
                         ));
                     }
@@ -201,14 +202,7 @@ public class RejectedFragment extends Fragment {
                             editor.putInt("delv_id", delv_id);
                             editor.putInt("order_id", order_id);
                             editor.commit();
-
-                            Fragment fragment = new SetAwaitFragment();
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            //Snackbar.make(getView(),delv_id+" "+order_id,Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(getView(),delv_id+" "+order_id,Snackbar.LENGTH_LONG).show();
                         }
                     });
                     recyclerView.setAdapter(rAdapter);

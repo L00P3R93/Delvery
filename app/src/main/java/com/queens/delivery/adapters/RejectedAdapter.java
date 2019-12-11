@@ -79,6 +79,7 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Reject
         rejectedViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
         rejectedViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
         rejectedViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        rejectedViewHolder.rejection.setText(mDataFiltered.get(position).getReason());
         rejectedViewHolder.date.setText(mDataFiltered.get(position).getDate());
     }
 
@@ -131,7 +132,7 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Reject
     }
     public class RejectedViewHolder extends RecyclerView.ViewHolder {
 
-        TextView order_code,customer_address,customer_phone,date;
+        TextView order_code,customer_address,customer_phone,date,rejection;
         //ImageView img_user;
         RelativeLayout container;
 
@@ -141,6 +142,7 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Reject
             order_code = itemView.findViewById(R.id.order_code);
             customer_address = itemView.findViewById(R.id.customer_address);
             customer_phone = itemView.findViewById(R.id.customer_phone);
+            rejection = itemView.findViewById(R.id.rejection);
             date = itemView.findViewById(R.id.date);
 
             if (isDark) {

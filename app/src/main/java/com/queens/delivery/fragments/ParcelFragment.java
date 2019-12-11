@@ -60,7 +60,7 @@ public class ParcelFragment extends Fragment {
     private int delv_id, order_id;
     SharedPreferences pref;
 
-    private static final String URL_PARCEL_DELIVERED = "https://delivery.queensclassycollections.com/api/member/get_parcel_delivered.php?rider_id=2";
+    private static final String URL_PARCEL_DELIVERED = "https://delivery.queensclassycollections.com/api/member/get_parcel.php?rider_id=2";
 
     public ParcelFragment() {
         // Required empty public constructor
