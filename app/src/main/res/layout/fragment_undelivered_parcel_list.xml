@@ -56,6 +56,18 @@
             android:lineSpacingExtra="8dp"
             android:text="Asdf 2 Asdf"
             android:textColor="@color/content_text_color" />
+        <TextView
+            android:id="@+id/reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/order_code"
+            android:layout_alignStart="@+id/order_code"
+            android:layout_alignLeft="@id/order_code"
+            android:layout_marginTop="52dp"
+            android:layout_marginRight="16dp"
+            android:lineSpacingExtra="8dp"
+            android:text="Asdf 3 Asdf"
+            android:textColor="@color/content_text_color" />
 
         <TextView
             android:id="@+id/date"

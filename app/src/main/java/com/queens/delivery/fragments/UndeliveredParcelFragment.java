@@ -63,7 +63,7 @@ public class UndeliveredParcelFragment extends Fragment implements SwipeRefreshL
     private int delv_id, order_id;
     SharedPreferences pref;
 
-    private static final String URL_UNDELIVERED_PARCELS = "https://delivery.queensclassycollections.com/api/member/get_undelivered_parcel.php?rider_id=2";
+    private static final String URL_UNDELIVERED_PARCELS = "https://delivery.queensclassycollections.com/api/member/get_parcel_undelivered.php?rider_id=2";
 
 
 
@@ -77,7 +77,7 @@ public class UndeliveredParcelFragment extends Fragment implements SwipeRefreshL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("UNDELIVERED");
+        getActivity().setTitle("UNDELIVERED PARCEL");
 
     }
 
@@ -213,6 +213,7 @@ public class UndeliveredParcelFragment extends Fragment implements SwipeRefreshL
                                 product.getString("bill_no"),
                                 product.getString("customer_address"),
                                 product.getString("customer_phone"),
+                                product.getString("reason"),
                                 product.getString("date")
                         ));
                     }

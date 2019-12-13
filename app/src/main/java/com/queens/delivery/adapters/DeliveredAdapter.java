@@ -86,6 +86,11 @@ public class DeliveredAdapter extends RecyclerView.Adapter<DeliveredAdapter.Deli
     @Override
     public int getItemCount() {return mDataFiltered.size();}
 
+    public void clearAll(){
+        mDataFiltered.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public Filter getFilter() {
 

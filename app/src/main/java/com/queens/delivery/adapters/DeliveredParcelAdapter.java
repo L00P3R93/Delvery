@@ -15,6 +15,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.queens.delivery.R;
 import com.queens.delivery.models.Orders;
 
@@ -77,6 +79,7 @@ public class DeliveredParcelAdapter extends RecyclerView.Adapter<DeliveredParcel
         dpViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
         dpViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
         dpViewHolder.date.setText(mDataFiltered.get(position).getDate());
+        Glide.with(this.mContext).load(mDataFiltered.get(position).getReason()).diskCacheStrategy(DiskCacheStrategy.ALL).into(dpViewHolder.receipt);
     }
 
     @Override
@@ -136,6 +139,7 @@ public class DeliveredParcelAdapter extends RecyclerView.Adapter<DeliveredParcel
     public class DeliveredParcelViewHolder extends RecyclerView.ViewHolder {
 
         TextView order_code,customer_address,customer_phone,date;
+        ImageView receipt;
         RelativeLayout container;
 
         public DeliveredParcelViewHolder(@NonNull View itemView) {
@@ -144,6 +148,7 @@ public class DeliveredParcelAdapter extends RecyclerView.Adapter<DeliveredParcel
             order_code = itemView.findViewById(R.id.order_code);
             customer_address = itemView.findViewById(R.id.customer_address);
             customer_phone = itemView.findViewById(R.id.customer_phone);
+            receipt = itemView.findViewById(R.id.receipt);
             date = itemView.findViewById(R.id.date);
 
             if (isDark) {

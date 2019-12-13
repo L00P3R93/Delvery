@@ -84,6 +84,11 @@ public class ParcelsAdapter extends RecyclerView.Adapter<ParcelsAdapter.ParcelsV
     @Override
     public int getItemCount() {return mDataFiltered.size();}
 
+    public void clearAll(){
+        mDataFiltered.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public Filter getFilter() {
 

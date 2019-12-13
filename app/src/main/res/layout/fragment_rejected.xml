@@ -9,6 +9,15 @@
     android:background="@color/white"
     android:id="@+id/root_layout">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_input">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/news_rv"
         android:layout_width="0dp"
@@ -21,6 +30,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_input"
         tools:listitem="@layout/fragment_rejected_list"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

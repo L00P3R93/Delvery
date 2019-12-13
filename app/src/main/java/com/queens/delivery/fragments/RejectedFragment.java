@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import com.android.volley.Request;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RejectedFragment extends Fragment {
+public class RejectedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerView;
     private RejectedAdapter rAdapter;
@@ -57,6 +58,7 @@ public class RejectedFragment extends Fragment {
     private ConstraintLayout rootLayout;
     private EditText searchInput;
     private CharSequence search="";
+    private SwipeRefreshLayout swipe;
     private ProgressBar progressBar;
     private int delv_id, order_id;
     SharedPreferences pref;
@@ -84,9 +86,17 @@ public class RejectedFragment extends Fragment {
         rootLayout = view.findViewById(R.id.root_layout);
         searchInput = view.findViewById(R.id.search_input);
         recyclerView = view.findViewById(R.id.news_rv);
+        swipe = view.findViewById(R.id.swipeContainer);
         mOrders = new ArrayList<>();
         progressBar = view.findViewById(R.id.progressBar);
         pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
+
+
+        swipe.setOnRefreshListener(this);
+        swipe.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         // load theme state
         isDark = getThemeStatePref();
@@ -149,6 +159,13 @@ public class RejectedFragment extends Fragment {
         });
         return view;
     }
+
+    public void onRefresh(){
+        rAdapter.clearAll();
+        loadOrders();
+        swipe.setRefreshing(false);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -166,7 +183,6 @@ public class RejectedFragment extends Fragment {
     private boolean getThemeStatePref () {
         boolean isDark = pref.getBoolean("isDark",false) ;
         return isDark;
-
     }
 
     private void loadOrders(){

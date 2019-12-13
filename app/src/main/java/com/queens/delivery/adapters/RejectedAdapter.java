@@ -86,6 +86,11 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Reject
     @Override
     public int getItemCount() {return mDataFiltered.size();}
 
+    public void clearAll(){
+        mDataFiltered.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public Filter getFilter() {
 

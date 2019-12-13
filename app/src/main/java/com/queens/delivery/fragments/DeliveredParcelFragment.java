@@ -61,7 +61,7 @@ public class DeliveredParcelFragment extends Fragment implements SwipeRefreshLay
     private int delv_id, order_id;
     SharedPreferences pref;
     
-    private static final String URL_PARCEL_DELIVERED = "https://delivery.queensclassycollections.com/api/member/get_parcel_delivered.php";
+    private static final String URL_PARCEL_DELIVERED = "https://delivery.queensclassycollections.com/api/member/get_parcel_delivered.php?rider_id=2";
     
 
     public DeliveredParcelFragment() {
@@ -72,7 +72,7 @@ public class DeliveredParcelFragment extends Fragment implements SwipeRefreshLay
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("EXCHANGES");
+        getActivity().setTitle("DELIVERED PARCELS");
 
     }
 
@@ -177,19 +177,14 @@ public class DeliveredParcelFragment extends Fragment implements SwipeRefreshLay
     public void onDetach() {super.onDetach();}
 
     private void saveThemeStatePref(boolean isDark) {
-
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("isDark",isDark);
         editor.commit();
     }
 
     private boolean getThemeStatePref () {
-
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("myPref",MODE_PRIVATE);
         boolean isDark = pref.getBoolean("isDark",false) ;
         return isDark;
-
     }
 
     private void loadOrders(){
@@ -211,6 +206,7 @@ public class DeliveredParcelFragment extends Fragment implements SwipeRefreshLay
                                 product.getString("bill_no"),
                                 product.getString("customer_address"),
                                 product.getString("customer_phone"),
+                                product.getString("receipt"),
                                 product.getString("date")
                         ));
                     }

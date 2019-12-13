@@ -1,8 +1,11 @@
 package com.queens.delivery.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ProgressBar;
@@ -37,7 +41,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.queens.delivery.R;
 import com.queens.delivery.adapters.HomeAdapter;
@@ -78,10 +84,9 @@ public class SetAwaitFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipe;
     private int delv_id, order_id;
+    private Dialog dialog;
     SharedPreferences pref;
-
-    private String URL_AWAITING_PRODUCTS = "";
-
+    private int success;
 
     public SetAwaitFragment() {
         // Required empty public constructor
@@ -107,6 +112,7 @@ public class SetAwaitFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipe = view.findViewById(R.id.swipeContainer);
         pref = getActivity().getApplicationContext().getSharedPreferences("myPref", Context.MODE_PRIVATE);
         mProducts = new ArrayList<>();
+        dialog = new Dialog(getContext());
         delv_id = pref.getInt("delv_id",0);
         order_id = pref.getInt("order_id", 0);
         ButterKnife.setDebug(true);
@@ -136,14 +142,10 @@ public class SetAwaitFragment extends Fragment implements SwipeRefreshLayout.OnR
         fabSwitcher.setOnClickListener(v -> {
             isDark = !isDark ;
             if (isDark) {
-
                 rootLayout.setBackgroundColor(getResources().getColor(R.color.black));
-
-
             }
             else {
                 rootLayout.setBackgroundColor(getResources().getColor(R.color.white));
-
             }
 
             setAwaitAdapter = new SetAwaitAdapter(getContext(), mProducts,isDark);
@@ -168,7 +170,8 @@ public class SetAwaitFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @OnClick(R.id.reject)
     public void reject(){
-        Snackbar.make(getView(), "Rejected", Snackbar.LENGTH_LONG).show();
+        ShowPopUp();
+        //Snackbar.make(getView(), "Rejected", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -192,7 +195,7 @@ public class SetAwaitFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void loadProducts(){
-        URL_AWAITING_PRODUCTS = "https://delivery.queensclassycollections.com/api/member/set_await.php?order_id="+order_id;
+        String URL_AWAITING_PRODUCTS = "https://delivery.queensclassycollections.com/api/member/set_await.php?order_id="+order_id;
         progressBar.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_AWAITING_PRODUCTS, new Response.Listener<String>() {
             @Override
@@ -228,6 +231,101 @@ public class SetAwaitFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
         Volley.newRequestQueue(getContext()).add(stringRequest);
 
+    }
+
+
+    private void acceptOrder(){
+        String URL_ACCEPT_ORDER = "https://delivery.queensclassycollections.com/api/member/accept.php?rider_id=2&order_id="+order_id;
+        progressBar.setVisibility(View.VISIBLE);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_ACCEPT_ORDER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.INVISIBLE);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("data");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject products = array.getJSONObject(i);
+                        success = products.getInt("success");
+                        if(success == 1){
+                            Snackbar.make(getView(),"SuccessFullyAccepted!",Snackbar.LENGTH_LONG).show();
+                        }else{
+                            Snackbar.make(getView(),"Error Accepting Order",Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar.make(getView(),"Error Accepting Order",Snackbar.LENGTH_LONG).show();
+            }
+        });
+        Volley.newRequestQueue(getContext()).add(stringRequest);
+
+    }
+
+
+    public void ShowPopUp(){
+        TextView txtClose;
+        Button btnFollow;
+        dialog.setContentView(R.layout.custompopup);
+        txtClose = dialog.findViewById(R.id.txtclose);
+        txtClose.setText("M");
+        btnFollow = dialog.findViewById(R.id.btnfollow);
+        txtClose.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void rejectOrder(){
+        String URL_REJECT_ORDER = "https://delivery.queensclassycollections.com/api/member/reject.php?rider_id=2&order_id="+order_id;
+        progressBar.setVisibility(View.VISIBLE);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REJECT_ORDER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.INVISIBLE);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("data");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject products = array.getJSONObject(i);
+                        success = products.getInt("success");
+                        if(success == 1){
+                            Snackbar.make(getView(),"SuccessFully!",Snackbar.LENGTH_LONG).show();
+                        }else{
+                            Snackbar.make(getView(),"Error Accepting Order",Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar.make(getView(),"Error Accepting Order",Snackbar.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("reason", "Time");
+                return params;
+            }
+        };
+        Volley.newRequestQueue(getContext()).add(stringRequest);
     }
 
 }

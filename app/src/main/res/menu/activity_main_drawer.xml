@@ -39,11 +39,11 @@
         <item
             android:id="@+id/nav_delivered_parcels"
             android:icon="@drawable/ic_work_black_24dp"
-            android:title="@string/menu_parcels" />
+            android:title="@string/menu_delivered_parcel" />
         <item
             android:id="@+id/nav_undelivered_parcels"
             android:icon="@drawable/ic_work_black_24dp"
-            android:title="@string/menu_parcels" />
+            android:title="@string/menu_undelivered_parcel" />
 
     </group>
 </menu>

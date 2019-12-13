@@ -51,7 +51,7 @@ public class Orders {
     private String customerAddress;
     private String date;
     private String reason;
-    private String rejection;
+    private String receipt;
 
     public Orders(int id, int billId, String billNo, String customerPhone, String customerAddress, String date, String reason){
         this.id=id;

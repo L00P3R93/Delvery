@@ -5,6 +5,13 @@
     <color name="colorPrimaryDarker">#CC1D1D</color>
     <color name="colorAccent">#FFFFFF</color>
 
+    <color name="colorPrimary2">#3F51B5</color>
+    <color name="colorPrimaryDark2">#2f333f</color>
+    <color name="bluelight">#49acd5</color>
+    <color name="green">#45bc62</color>
+    <color name="orange">#eaad43</color>
+    <color name="colorAccent2">#FF4081</color>
+
     <color name="colorBackground">#E43F3F</color>
     <color name="colorText">#FFFFFF</color>
     <color name="colorTextHint">#CCCCCC</color>

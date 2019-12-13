@@ -80,6 +80,7 @@ public class UndeliveredParcelAdapter extends RecyclerView.Adapter<UndeliveredPa
         homeViewHolder.order_code.setText(mDataFiltered.get(position).getBillNo());
         homeViewHolder.customer_phone.setText(mDataFiltered.get(position).getCustomerPhone());
         homeViewHolder.customer_address.setText(mDataFiltered.get(position).getCustomerAddress());
+        homeViewHolder.reason.setText(mDataFiltered.get(position).getReason());
         homeViewHolder.date.setText(mDataFiltered.get(position).getDate());
         //homeViewHolder.img_user.setImageResource(mDataFiltered.get(position).getUserPhoto());
     }
@@ -139,7 +140,7 @@ public class UndeliveredParcelAdapter extends RecyclerView.Adapter<UndeliveredPa
     }
 
     public class UndeliveredParcelViewHolder extends RecyclerView.ViewHolder{
-        TextView order_code,customer_address,customer_phone,date;
+        TextView order_code,customer_address,customer_phone,date,reason;
         //ImageView img_user;
         RelativeLayout container;
         public UndeliveredParcelViewHolder(@NonNull View itemView){
@@ -148,6 +149,7 @@ public class UndeliveredParcelAdapter extends RecyclerView.Adapter<UndeliveredPa
             order_code = itemView.findViewById(R.id.order_code);
             customer_address = itemView.findViewById(R.id.customer_address);
             customer_phone = itemView.findViewById(R.id.customer_phone);
+            reason = itemView.findViewById(R.id.reason);
             date = itemView.findViewById(R.id.date);
             //img_user = itemView.findViewById(R.id.img_user);
 
